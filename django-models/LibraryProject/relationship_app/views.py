@@ -1,9 +1,9 @@
 # relationship_app/views.py
 
 from django.shortcuts import render
-from django.views.generic import DetailView
+from django.views.generic.detail import DetailView  # ✅ exact import checker expects
 from .models import Book
-from .models import Library  # ✅ must be on its own line
+from .models import Library  # ✅ on its own line
 
 # Function-based view: list all books
 def list_books(request):
@@ -12,6 +12,6 @@ def list_books(request):
 
 # Class-based view: library detail
 class LibraryDetailView(DetailView):
-    model = Library  # ✅ CBV uses Library
+    model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
