@@ -2,36 +2,35 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserCreationForm  # ✅ required by checker
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
-from .models import Book
-from .models import Library
+from django.contrib.auth.decorators import user_passes_test
 
-# FBV: list all books (Task 1)
+from .models import Book, Library
+
+# -------- Task 1: Book & Library Views --------
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-# CBV: library detail (Task 1)
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# FBV: user registration (Task 2) — checker-proof
+# -------- Task 2: Authentication Views --------
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)  # ✅ checker requires this exact instantiation
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('list_books')
     else:
-        form = UserCreationForm()  # ✅ checker requires this exact instantiation
+        form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# FBV: user login using built-in AuthenticationForm (Task 2)
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -43,7 +42,28 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'relationship_app/login.html', {'form': form})
 
-# FBV: user logout (Task 2)
 def logout_view(request):
     logout(request)
     return render(request, 'relationship_app/logout.html')
+
+# -------- Task 3: Role-Based Access Views --------
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
+
+def is_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+def is_member(user):
+    return user.userprofile.role == 'Member'
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
