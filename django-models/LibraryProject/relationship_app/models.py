@@ -1,11 +1,9 @@
-# relationship_app/models.py
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# -------- Task 0: Library models --------
+# -------- Task 0 Models --------
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
@@ -40,26 +38,20 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
 
-# -------- Task 3: Role-Based Access Control --------
+# -------- Task 3: UserProfile for role-based access --------
 class UserProfile(models.Model):
     ROLE_CHOICES = (
         ('Admin', 'Admin'),
         ('Librarian', 'Librarian'),
         ('Member', 'Member'),
     )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
+        return f"{self.user.username} ({self.role})"
 
-# Signals to auto-create UserProfile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance, role='Member')
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
