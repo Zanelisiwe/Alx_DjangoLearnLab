@@ -1,7 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+# Resolve the actual User model (accounts.User)
+User = get_user_model()
 
 # -------- Task 0 Models --------
 class Author(models.Model):
@@ -9,6 +13,7 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
@@ -24,12 +29,14 @@ class Book(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author.name}"
 
+
 class Library(models.Model):
     name = models.CharField(max_length=200)
     books = models.ManyToManyField(Book)
 
     def __str__(self):
         return self.name
+
 
 class Librarian(models.Model):
     name = models.CharField(max_length=100)
@@ -38,6 +45,7 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
 
+
 # -------- Task 3: UserProfile for role-based access --------
 class UserProfile(models.Model):
     ROLE_CHOICES = (
@@ -45,11 +53,12 @@ class UserProfile(models.Model):
         ('Librarian', 'Librarian'),
         ('Member', 'Member'),
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     def __str__(self):
         return f"{self.user.username} ({self.role})"
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
