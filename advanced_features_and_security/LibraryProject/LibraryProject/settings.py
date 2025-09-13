@@ -15,7 +15,6 @@ ALLOWED_HOSTS = []
 # --- Applications ---
 INSTALLED_APPS = [
     # your apps
-    'accounts',                 # <-- ADD: custom user app
     'bookshelf',
     'relationship_app',
 
@@ -29,7 +28,8 @@ INSTALLED_APPS = [
 ]
 
 # Tell Django to use your custom user model
-AUTH_USER_MODEL = 'accounts.User'   # <-- ADD
+AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
