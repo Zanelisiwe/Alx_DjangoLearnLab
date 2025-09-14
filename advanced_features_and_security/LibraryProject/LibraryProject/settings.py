@@ -150,6 +150,14 @@ CSRF_COOKIE_SAMESITE = "Lax"
 # Force HTTPS in production
 SECURE_SSL_REDIRECT = not DEBUG
 
+# -----------------------------------------------------------------------------
+# Proxy SSL Header
+# -----------------------------------------------------------------------------
+# When behind a load balancer or reverse proxy (e.g., Nginx, Apache, ELB),
+# this tells Django to trust the X-Forwarded-Proto header for detecting HTTPS.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
 # HSTS (enable only when you have HTTPS properly configured)
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year in prod
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
