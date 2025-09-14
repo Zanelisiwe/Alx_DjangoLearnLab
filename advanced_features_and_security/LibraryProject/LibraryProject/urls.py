@@ -10,8 +10,8 @@ urlpatterns = [
     # Built-in auth views: /accounts/login/, /accounts/logout/, password reset, etc.
     path("accounts/", include("django.contrib.auth.urls")),
 
-    # If you add public signup later in accounts/urls.py, include it here too:
-    # path("accounts/", include("accounts.urls")),
+    # Bookshelf app routes
+    path("books/", include("bookshelf.urls")),
 
     # A tiny home page so login redirects have somewhere to land (optional)
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
