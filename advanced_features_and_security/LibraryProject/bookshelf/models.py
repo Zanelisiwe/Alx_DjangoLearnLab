@@ -9,6 +9,7 @@ from django.utils import timezone
 def profile_upload_path(instance, filename):
     return f"profile_photos/{instance.pk or 'new'}/{filename}"
 
+
 def validate_file_size(value, max_mb: int = 5):
     if value and value.size > max_mb * 1024 * 1024:
         raise ValidationError(f"File too large. Max size is {max_mb}MB.")
@@ -83,6 +84,12 @@ class Book(models.Model):
     title = models.CharField(max_length=200, db_index=True)
     author = models.CharField(max_length=100, db_index=True)
     publication_year = models.IntegerField()
+
+    class Meta:
+        permissions = [
+            ("can_create", "Can create a book"),
+            ("can_delete", "Can delete a book"),
+        ]
 
     def __str__(self):
         return f"{self.title} by {self.author} ({self.publication_year})"
