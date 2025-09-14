@@ -44,3 +44,11 @@ def delete_book(request, pk):
         return redirect("bookshelf:book_list")
 
     return render(request, "bookshelf/book_confirm_delete.html", {"book": book})
+
+# ---------- Request book view ----------
+def book_list(request):
+    form = SearchForm(request.GET or None)
+    qs = Book.objects.all()
+    if form.is_valid() and form.cleaned_data.get("q"):
+        qs = qs.filter(title__icontains=form.cleaned_data["q"])  # ORM param -> no SQL injection
+    return render(request, "bookshelf/book_list.html", {"books": qs, "form": form})

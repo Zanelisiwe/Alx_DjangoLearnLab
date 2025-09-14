@@ -68,7 +68,7 @@ MIDDLEWARE = [
     # Shim to add CSP + X-XSS-Protection header if django-csp is not used.
     # Create bookshelf/middleware.py with SecurityHeadersMiddleware from my next step,
     # then uncomment this line:
-    # 'bookshelf.middleware.SecurityHeadersMiddleware',
+    'bookshelf.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Example Form</h1>
-<form method="post" action="{% url 'bookshelf:form_example' %}">
+<form method="post" action="">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Submit</button>
