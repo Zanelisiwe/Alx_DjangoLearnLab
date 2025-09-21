@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     
 # Third-party
     'rest_framework',
+    'rest_framework.authtoken',
 
 # Local apps
-    'api',  # (we'll create this in Step 3)
+    'api', 
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DRF defaults: token + session auth (session helps the browsable API)
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    # Default permission: read for everyone, write for authenticated users
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+}
