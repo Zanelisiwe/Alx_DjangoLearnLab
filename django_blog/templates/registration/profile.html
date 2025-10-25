@@ -1,4 +1,7 @@
 {% extends 'blog/base.html' %}
+{% load static %}
+{% block title %}Your Profile{% endblock %}
+<link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
 {% block content %}
 <h2>Your Profile</h2>
 <form method="post">
