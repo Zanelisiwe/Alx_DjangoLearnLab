@@ -1,7 +1,9 @@
 {% extends "blog/base.html" %}
 {% load static %}
 {% block title %}Logged out{% endblock %}
-<link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/auth.css' %}">
+<script src="{% static 'blog/js/auth.js' %}" defer></script>
+
 {% block content %}
   <h2>Logged out</h2>
   <p>You have been successfully logged out.</p>
