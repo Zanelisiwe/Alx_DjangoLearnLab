@@ -57,7 +57,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    template_name = 'blog/post_form.html'
+    template_name = 'blog/post_create.html'
     success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
@@ -67,7 +67,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
-    template_name = 'blog/post_form.html'
+    template_name = 'blog/post_update.html'
     success_url = reverse_lazy('post_list')
 
     def test_func(self):
