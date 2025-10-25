@@ -1,27 +1,42 @@
+# blog/views.py
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm
-from django.contrib import messages
+from django.contrib.auth import views as auth_views
 
-# Registration view
+from .forms import RegistrationForm, ProfileForm
+
+
 def register_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+    """Handles user registration."""
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            messages.success(request, 'Registration successful.')
-            return redirect('home')
+            messages.success(request, "Registration successful! You can now log in.")
+            # You can choose to log them in automatically:
+            # login(request, user)
+            return redirect("login")
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        form = CustomUserCreationForm()
-    return render(request, 'blog/register.html', {'form': form})
+        form = RegistrationForm()
+    return render(request, "registration/register.html", {"form": form})
 
-# Profile view
+
 @login_required
 def profile_view(request):
-    if request.method == 'POST':
-        request.user.email = request.POST.get('email')
-        request.user.save()
-        messages.success(request, 'Profile updated successfully.')
-    return render(request, 'blog/profile.html')
+    """Allows users to view and update their profile info."""
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ProfileForm(instance=request.user)
+
+    return render(request, "registration/profile.html", {"form": form})
